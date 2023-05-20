@@ -36,6 +36,15 @@ def return_shelters(request):
     
     return JsonResponse({"success": False, "error": "Invalid method"})
 
+def get_user(request):
+
+    if request.method == "GET":
+        # Check token.
+        if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+            return JsonResponse({"success": False, "error": "Invalid token"})
+        
+        user = tokens[request.headers["Authorization"]]
+        return JsonResponse({"success": True, "name": user.name, "email": user.email})
 
 def shelter_list_view(request):
     if request.method == 'GET':
