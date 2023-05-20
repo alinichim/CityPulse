@@ -45,6 +45,7 @@ def register_user(request):
         # Return a success message or redirect the user
         return JsonResponse({"success": "User registered successfully."})
 
+
 @csrf_exempt
 def login_user(request):
     # Check method.

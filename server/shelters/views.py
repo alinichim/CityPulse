@@ -1,9 +1,11 @@
 from .models import Shelter
 from django.http import JsonResponse
 from users.views import tokens
+from django.http import JsonResponse
+from geopy import distance
+
 
 def return_shelters(request):
-
     if request.method == 'GET':
         # Check token.
         if "Authorization" in request.headers and request.headers["Authorization"] not in tokens:
@@ -28,3 +30,34 @@ def return_shelters(request):
         return JsonResponse({"safetyPlaces": data_q})
     
     return JsonResponse({"error": "Invalid method"})
+
+
+def shelter_list_view(request):
+    if request.method == 'GET':
+        latitude = float(request.body['latitude'])
+        longitude = float(request.body['longitude'])
+        range_km = float(request.body['range'])
+
+        user_location = (latitude, longitude)
+
+        shelters = Shelter.objects.all()
+        shelters_within_range = []
+
+        for shelter in shelters:
+            shelter_location = (shelter.latitude, shelter.longitude)
+            dist = distance(user_location, shelter_location).km
+
+            if dist <= range_km:
+                shelters_within_range.append(shelter)
+
+        shelter_data = [
+            {
+                'name': shelter.name,
+                'latitude': shelter.latitude,
+                'longitude': shelter.longitude,
+                'distance': distance(user_location, (shelter.latitude, shelter.longitude)).km
+            }
+            for shelter in shelters_within_range
+        ]
+
+        return JsonResponse({'shelters': shelter_data})
