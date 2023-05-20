@@ -1,8 +1,5 @@
-from rest_framework import viewsets
 from .models import Shelter
-from .serializers import ShelterSerializer
-from django.http import JsonResponse, HttpRequest
-import json
+from django.http import JsonResponse
 import random
 import string
 
@@ -37,3 +34,5 @@ def return_shelters(request):
             data_q.append(data)
 
         return JsonResponse({"safetyPlaces": data_q})
+    
+    return JsonResponse({"error": "Invalid method"})
