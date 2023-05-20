@@ -1,10 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ShelterViewSet
-
-router = DefaultRouter()
-router.register(r'shelters', ShelterViewSet)
+from .views import ShelterViewSet, return_shelters
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('api/shelters/', return_shelters),
 ]
