@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import ShelterListAPIView
+from .views import return_shelters
 
 urlpatterns = [
-    path('api/shelters/', ShelterListAPIView.as_view(), name='shelter-list'),
+    path('api/shelters/', return_shelters, name='shelter-list'),
 ]
