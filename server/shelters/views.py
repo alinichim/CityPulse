@@ -8,7 +8,7 @@ class ShelterViewSet(viewsets.ModelViewSet):
     serializer_class = ShelterSerializer
 
 def return_shelters(request):
-    queryset = Shelter.objects.all();
+    queryset = Shelter.objects.all()
 
     data_q = []
 

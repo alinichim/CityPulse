@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'shelters',
+    'users',
     'rest_framework',
 ]
 
