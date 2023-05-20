@@ -6,7 +6,7 @@ def return_shelters(request):
 
     if request.method == 'GET':
         # Check token.
-        if request.headers["Authorization"] not in tokens:
+        if "Authorization" in request.headers and request.headers["Authorization"] not in tokens:
             return JsonResponse({"error": "Invalid token"})
 
         queryset = Shelter.objects.all()
