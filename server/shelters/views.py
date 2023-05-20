@@ -2,7 +2,7 @@ from .models import Shelter
 from django.http import JsonResponse
 from users.views import tokens
 from django.http import JsonResponse
-from geopy import distance
+from geopy.distance import geodesic
 import json
 import hashlib
 import string
@@ -39,9 +39,10 @@ def return_shelters(request):
 
 def shelter_list_view(request):
     if request.method == 'GET':
-        latitude = float(request.body['latitude'])
-        longitude = float(request.body['longitude'])
-        range_km = float(request.body['range'])
+        range_data = json.loads(request.body.decode('utf-8'))
+        latitude = range_data['latitude']
+        longitude = range_data['longitude']
+        range_km = range_data['range']
 
         user_location = (latitude, longitude)
 
@@ -50,17 +51,20 @@ def shelter_list_view(request):
 
         for shelter in shelters:
             shelter_location = (shelter.latitude, shelter.longitude)
-            dist = distance(user_location, shelter_location).km
+            dist = geodesic(user_location, shelter_location).km
 
             if dist <= range_km:
                 shelters_within_range.append(shelter)
 
         shelter_data = [
             {
-                'name': shelter.name,
-                'latitude': shelter.latitude,
-                'longitude': shelter.longitude,
-                'distance': distance(user_location, (shelter.latitude, shelter.longitude)).km
+                "name": shelter.name,
+                "address": shelter.address,
+                "capacity": shelter.capacity,
+                "functionalities": shelter.functionalities,
+                "latitude": shelter.latitude,
+                "longitude": shelter.longitude,
+                "type": shelter.type
             }
             for shelter in shelters_within_range
         ]
