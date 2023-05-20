@@ -35,7 +35,6 @@ def return_shelters(request):
     
     return JsonResponse({"success": False, "error": "Invalid method"})
 
-<<<<<<< HEAD
 def get_user(request):
 
     if request.method == "GET":
@@ -45,7 +44,6 @@ def get_user(request):
         
         user = tokens[request.headers["Authorization"]]
         return JsonResponse({"success": True, "name": user.name, "email": user.email})
-=======
 
 def shelter_list_view(request):
     if request.method == 'GET':
@@ -80,4 +78,3 @@ def shelter_list_view(request):
         ]
 
         return JsonResponse({'shelters': shelter_data})
->>>>>>> 6175e20bc24b9838ce5e4cc7fd731c8ccb62cb31
