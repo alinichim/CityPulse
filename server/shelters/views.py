@@ -1,14 +1,6 @@
 from .models import Shelter
 from django.http import JsonResponse
-import random
-import string
-
-def generate_token(length):
-    letters = string.ascii_letters + string.digits
-    token = ''.join(random.choice(letters) for _ in range(length))
-    return token
-
-tokens = {"Bearer=6455898ad150673474b34370": True}
+from users.views import tokens
 
 def return_shelters(request):
 
