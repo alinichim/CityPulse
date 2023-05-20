@@ -23,6 +23,7 @@ class CustomUser(AbstractBaseUser):
     name = models.CharField(max_length=30)
     password = models.CharField(max_length=256)
     email = models.EmailField(unique=True)
+    contact = models.CharField(max_length=20, default='+40785070957')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

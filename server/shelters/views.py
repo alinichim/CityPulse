@@ -4,8 +4,8 @@ from users.views import tokens
 from django.http import JsonResponse
 from geopy.distance import geodesic
 import json
-import hashlib
-import string
+from twilio.rest import Client
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -70,3 +70,24 @@ def shelter_list_view(request):
         ]
 
         return JsonResponse({'shelters': shelter_data})
+    
+    
+@csrf_exempt
+def emergency_sms(request):
+    account_sid = 'AC75dfdabe82e41397a479a5686da9e540'
+    auth_token = '1c3013ec7e42ae83b2ff34d321958aad'
+    
+    if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+        return JsonResponse({"success": False, "error": "Invalid token"})
+    
+    client = Client(account_sid, auth_token)
+    data = json.loads(request.body.decode('utf-8'))
+
+    msg_text = f"{tokens[request.headers['Authorization']].name} is in need of urgent help!If you can't reach out to them, please dial the national emergency number and ask for immediate support! (lat. {data['latitude']}, long. {data['longitude']}"
+
+    message = client.messages.create(
+        body=msg_text,
+        from_='+12542564967',
+        to=tokens[request.headers["Authorization"]].contact
+    )
+    return JsonResponse({'success':True})
