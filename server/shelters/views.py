@@ -1,9 +1,9 @@
-from rest_framework import generics
+from rest_framework import viewsets
 from .models import Shelter
 from .serializers import ShelterSerializer
 from django.http import JsonResponse
 
-class ShelterListAPIView(generics.ListAPIView):
+class ShelterViewSet(viewsets.ModelViewSet):
     queryset = Shelter.objects.all()
     serializer_class = ShelterSerializer
 
