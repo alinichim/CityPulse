@@ -34,7 +34,7 @@ def return_shelters(request):
 
         return JsonResponse({"success": True, "safetyPlaces": data_q})
     
-    return JsonResponse({"success": False, "error": "Invalid method"})
+    return JsonResponse({"success": False, "error": "Bad request method"})
 
 def get_user(request):
 
@@ -45,8 +45,11 @@ def get_user(request):
         
         user = tokens[request.headers["Authorization"]]
         return JsonResponse({"success": True, "name": user.name, "email": user.email})
+    
+    return JsonResponse({"success": False, "error": "Bad request method"})
 
 def shelter_list_view(request):
+
     if request.method == 'GET':
         range_data = json.loads(request.body.decode('utf-8'))
         latitude = range_data['latitude']
@@ -80,23 +83,29 @@ def shelter_list_view(request):
 
         return JsonResponse({'shelters': shelter_data})
     
+    return JsonResponse({"success": False, "error": "Bad request method"})
+    
     
 @csrf_exempt
 def emergency_sms(request):
-    account_sid = 'AC75dfdabe82e41397a479a5686da9e540'
-    auth_token = '1c3013ec7e42ae83b2ff34d321958aad'
-    
-    if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
-        return JsonResponse({"success": False, "error": "Invalid token"})
-    
-    client = Client(account_sid, auth_token)
-    data = json.loads(request.body.decode('utf-8'))
 
-    msg_text = f"{tokens[request.headers['Authorization']].name} is in need of urgent help!If you can't reach out to them, please dial the national emergency number and ask for immediate support! (lat. {data['latitude']}, long. {data['longitude']}"
+    if request.method == 'POST':
+        account_sid = 'AC75dfdabe82e41397a479a5686da9e540'
+        auth_token = '1c3013ec7e42ae83b2ff34d321958aad'
+        
+        if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+            return JsonResponse({"success": False, "error": "Invalid token"})
+        
+        client = Client(account_sid, auth_token)
+        data = json.loads(request.body.decode('utf-8'))
 
-    message = client.messages.create(
-        body=msg_text,
-        from_='+12542564967',
-        to=tokens[request.headers["Authorization"]].contact
-    )
-    return JsonResponse({'success':True})
+        msg_text = f"{tokens[request.headers['Authorization']].name} is in need of urgent help!If you can't reach out to them, please dial the national emergency number and ask for immediate support! (lat. {data['latitude']}, long. {data['longitude']}"
+
+        message = client.messages.create(
+            body=msg_text,
+            from_='+12542564967',
+            to=tokens[request.headers["Authorization"]].contact
+        )
+        return JsonResponse({'success':True})
+
+    return JsonResponse({"success": False, "error": "Bad request method"})

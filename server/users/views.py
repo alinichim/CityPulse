@@ -51,6 +51,8 @@ def register_user(request):
         
         # Return a success message or redirect the user
         return JsonResponse({"success": True, "Authorization": new_token})
+    
+    return JsonResponse({"success": False, "error": "Bad request method"})
 
 
 @csrf_exempt
@@ -82,3 +84,5 @@ def login_user(request):
         # Return a success message or redirect the user
         response = JsonResponse({"success": True, "Authorization": new_token})
         return response
+    
+    return JsonResponse({"success": False, "error": "Bad request method"})

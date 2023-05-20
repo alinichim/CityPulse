@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
+from django.http.response import Http404
+
+def handle_404(request, exception):
+    return JsonResponse({"success": False, 'error': 'Not found'}, status=404)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('shelters.urls')),
     path('', include('users.urls')),
 ]
+
+handler404 = 'server.urls.handle_404'
