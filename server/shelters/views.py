@@ -97,9 +97,8 @@ def emergency_sms(request):
         
         client = Client(account_sid, auth_token)
         data = json.loads(request.body.decode('utf-8'))
-
-        msg_text = f"{tokens[request.headers['Authorization']].name} is in need of urgent help!If you can't reach out to them, please dial the national emergency number and ask for immediate support! (lat. {data['latitude']}, long. {data['longitude']}"
-
+        msg_text = f"{tokens[request.headers['Authorization']].name} is in need of urgent help!If you can't reach out to them, please dial the national emergency number and ask for immediate support! (lat. {str(data['latitude'])} long. {str(data['latitude'])}"
+        
         message = client.messages.create(
             body=msg_text,
             from_='+12542564967',
