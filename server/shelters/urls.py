@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import return_shelters, shelter_list_view, emergency_sms, get_user, add_friend, remove_friend, send_location, get_location
+from .views import return_shelters, shelter_list_view, emergency_sms, get_user, add_friend, remove_friend, send_location, get_location, get_associates
 
 urlpatterns = [
     path('shelters/', return_shelters),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('removefriend/', remove_friend),
     path('sendlocation/', send_location),
     path('getlocation/', get_location),
+    path('getassociates/', get_associates),
 ]

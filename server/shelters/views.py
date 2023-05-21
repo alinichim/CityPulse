@@ -224,3 +224,18 @@ def get_location(request):
         return JsonResponse({"success": True, email: location_data[email]})
 
     return JsonResponse({"success": False, "error": "Bad request method"})
+
+@csrf_exempt
+def get_associates(request):
+    # Check method.
+    if request.method == "GET":
+        # Check token.
+        if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+            return JsonResponse({"success": False, "error": "Invalid token"})
+        
+        requesting_user = tokens[request.headers["Authorization"]]
+        if 'associates' not in requesting_user.friend_list:
+            requesting_user.friend_list['associates'] = []
+        return JsonResponse({"success": True, "associates": requesting_user.friend_list['associates']})
+        
+    return JsonResponse({"success": False, "error": "Bad request method"})
