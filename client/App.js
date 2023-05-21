@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import LoginPage from "./pages/LogIn";
 import RegisterPage from "./pages/Register";
 import SearchMap from "./pages/SearchMap";
+import Emergency from "./pages/Emergency";
 import { Text } from "react-native";
 import { getUser } from "./endpoints";
 

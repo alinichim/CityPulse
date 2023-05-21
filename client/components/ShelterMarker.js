@@ -22,6 +22,7 @@ export default function CustomMarker({
   capacity,
   functionalities,
   type,
+  distance,
 }) {
   const markerImages = {
     exit: require("../assets/markers/exit.png"),
@@ -69,6 +70,10 @@ export default function CustomMarker({
           <View style={styles.row}>
             <Text style={styles.label}>Adress: </Text>
             <Text>{description}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Distance: </Text>
+            <Text>{distance}</Text>
           </View>
           <Text style={styles.label}>Facilities:</Text>
           <MarkedList counterRenderer={disc}>

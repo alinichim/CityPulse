@@ -23,7 +23,9 @@ const Navbar = ({ onSosPress, selected, setSelected }) => {
       <NavButton name="search" onPress={onSearchPress} id={0} />
       <NavButton name="medkit" onPress={onSearchPress} id={1} />
       <NavButton name="information-circle" onPress={onSearchPress} id={2} />
-      <NavButton name="sos" onPress={onSosPress} id={3} color="red" />
+      <NavButton name="heart" onPress={onSearchPress} id={3} />
+      <NavButton name="people-outline" onPress={onSearchPress} id={4} />
+      <NavButton name="sos" onPress={onSosPress} id={5} color="red" />
     </View>
   );
 };
@@ -32,9 +34,9 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     top: 50,
-    left: "10%",
+    left: "5%",
     zIndex: 1,
-    width: "80%",
+    width: "90%",
 
     flexDirection: "row",
     alignItems: "center",

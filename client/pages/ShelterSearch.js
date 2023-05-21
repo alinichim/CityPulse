@@ -5,7 +5,7 @@ import ShelterMap from "../components/ShelterMap";
 
 import { getShelters } from "../endpoints";
 
-export default function ShelterSearch({ auth }) {
+export default function ShelterSearch({ auth, location }) {
   const [shelters, setShelters] = useState([]);
   const [showExit, setShowExit] = useState(true);
   const [showAtomic, setShowAtomic] = useState(true);
@@ -45,7 +45,11 @@ export default function ShelterSearch({ auth }) {
 
   return (
     <View style={styles.container}>
-      <ShelterMap shelters={shelters} filterShelters={filterShelters} />
+      <ShelterMap
+        shelters={shelters}
+        filterShelters={filterShelters}
+        location={location}
+      />
       <ControlPanel
         showExit={showExit}
         showAtomic={showAtomic}

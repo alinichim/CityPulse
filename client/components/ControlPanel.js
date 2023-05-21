@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Switch, StyleSheet } from "react-native";
+import { View, Text, Switch, StyleSheet, Platform } from "react-native";
 
 const ControlPanel = ({
   showExit,
@@ -10,7 +10,12 @@ const ControlPanel = ({
   toggleCivil,
 }) => {
   return (
-    <View style={styles.controlPanel}>
+    <View
+      style={[
+        styles.controlPanel,
+        Platform.OS === "android" && styles.androidControlPanel,
+      ]}
+    >
       <View style={styles.switchContainer}>
         <Text style={styles.filterLabel}>Exit</Text>
         <Switch value={showExit} onValueChange={toggleExit} />
@@ -28,10 +33,11 @@ const ControlPanel = ({
 };
 
 export default ControlPanel;
+
 const styles = StyleSheet.create({
   controlPanel: {
     position: "absolute",
-    bottom: 50,
+    bottom: 110,
     left: "10%",
     right: "10%",
     width: "80%",
@@ -41,16 +47,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
-
-    flexDirection: "row", // Change flexDirection to "row"
-    alignItems: "center", // Adjust alignment as per your preference
-    justifyContent: "space-between", // Adjust alignment as per your preference
-    paddingVertical: 15, // Adjust vertical padding for spacing
-    paddingHorizontal: 15, // Adjust horizontal padding for spacing
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    gap: 5,
   },
-  controlText: {
-    fontSize: 16,
-    fontWeight: "bold",
+  androidControlPanel: {
+    paddingVertical: 5, // Adjust vertical padding for spacing on Android
+    paddingHorizontal: 15, // Adjust horizontal padding for spacing on Android
   },
   switchContainer: {
     flexDirection: "row",
@@ -63,7 +69,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   filterLabel: {
-    marginRight: 10,
+    ...(Platform.OS === "ios" && { marginRight: 10 }), // Apply marginRight only on Android
   },
   map: {
     flex: 1,

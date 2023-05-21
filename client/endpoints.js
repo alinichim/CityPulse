@@ -1,14 +1,21 @@
-const BASE_URL = "http://10.101.0.97:8000";
+const BASE_URL = "http://10.101.0.90:8000";
 const SHELTER_ENDPOINT = BASE_URL + "/shelters/";
 const LOGIN_ENDPOINT = BASE_URL + "/login/";
 const REGISTER_ENDPOINT = BASE_URL + "/register/";
 const USER_ENDPOINT = BASE_URL + "/user/";
 const UPDATE_ENDPOINT = BASE_URL + "/update/";
 const SOS_ENDPOINT = BASE_URL + "/sms/";
-const ADD_FRIEND_ENDPOINT = BASE_URL + "/sms/";
-const REMOVE_FRIEND_ENDPOINT = BASE_URL + "/sms/";
-const SEND_LOCATION_ENDPOINT = BASE_URL + "/sms/";
-const GET_LOCATION_ENDPOINT = BASE_URL + "/sms/";
+
+const ADD_FRIEND_ENDPOINT = BASE_URL + "/addfriendd/";
+const REMOVE_FRIEND_ENDPOINT = BASE_URL + "/removefriend/";
+const SEND_LOCATION_ENDPOINT = BASE_URL + "/sendlocation/";
+const GET_LOCATION_ENDPOINT = BASE_URL + "/getlocation/";
+
+const ADD_FAVOURITE_ENDPOINT = BASE_URL + "/add-fav/";
+const REMOVE_FAVOURITE_ENDPOINT = BASE_URL + "/remove-fav/";
+const GET_FAVOURITE_ENDPOINT = BASE_URL + "/get-fav/";
+
+const GET_ASSOCIATES_ENDPOINT = BASE_URL + "/getassociates/";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -40,7 +47,7 @@ const getProgressData = async (url) => {
 };
 const getVenues = async (query) => {
   const params = new URLSearchParams({
-    api_key_private: "pri_cacc9544b15d4b339d8ce1716b17eeae",
+    api_key_private: "pri_14a0cd83a0b44cbb95aebf7dbe326faa",
     q: `${query} in bucharest`,
     num: 5,
     fast: false,
@@ -210,6 +217,7 @@ const sendLocation = async (auth, { latitude, longitude }) => {
   }
 };
 const getLocation = async (auth, email) => {
+  console.log(email);
   try {
     const response = await fetch(GET_LOCATION_ENDPOINT, {
       method: "POST",
@@ -230,10 +238,83 @@ const getLocation = async (auth, email) => {
   }
 };
 
+const addFavourite = async (auth, favourite) => {
+  console.log("fav adding");
+  try {
+    const response = await fetch(ADD_FAVOURITE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer=${auth}`,
+      },
+      body: JSON.stringify(favourite),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { success: false, error: error };
+  }
+};
+const removeFavourite = async (auth, favourite) => {
+  console.log(favourite.venue_id);
+  try {
+    const response = await fetch(REMOVE_FAVOURITE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer=${auth}`,
+      },
+      body: JSON.stringify(favourite),
+    });
+
+    // Registration successful
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { success: false, error: error };
+  }
+};
+const getFavourite = async (auth) => {
+  try {
+    const response = await fetch(GET_FAVOURITE_ENDPOINT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer=${auth}`,
+      },
+    });
+
+    const data = await response.json();
+    const cleanData = JSON.parse(data).map(({ data }) => data);
+    return cleanData;
+  } catch (error) {
+    console.error("Error:", error);
+    return { success: false, error: error };
+  }
+};
+
+const getAssociates = async (auth) => {
+  try {
+    const response = await fetch(GET_ASSOCIATES_ENDPOINT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer=${auth}`,
+      },
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { success: false, error: error };
+  }
+};
+
 export {
   getShelters,
-  LOGIN_ENDPOINT,
-  REGISTER_ENDPOINT,
   login,
   register,
   authorize,
@@ -245,4 +326,8 @@ export {
   removeFriend,
   sendLocation,
   getLocation,
+  addFavourite,
+  removeFavourite,
+  getFavourite,
+  getAssociates,
 };
