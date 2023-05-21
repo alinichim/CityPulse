@@ -19,7 +19,6 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
 
-
 class CustomUser(AbstractBaseUser):
     name = models.CharField(max_length=30)
     password = models.CharField(max_length=256)
@@ -27,6 +26,7 @@ class CustomUser(AbstractBaseUser):
     contact = models.CharField(max_length=20, default='+40785070957')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    friend_list = models.JSONField(default=dict)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
