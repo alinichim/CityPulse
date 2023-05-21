@@ -6,6 +6,7 @@ import hashlib
 import string
 import random
 
+
 def generate_token(length):
     letters = string.ascii_letters + string.digits
     token = ''.join(random.choice(letters) for _ in range(length))
@@ -87,3 +88,20 @@ def login_user(request):
     
     return JsonResponse({"success": False, "error": "Bad request method"})
 
+
+@csrf_exempt
+def change_user_data(request):
+    if request.method == "PUT":
+        if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+            return JsonResponse({"success": False, "error": "Invalid token"})
+        data = json.loads(request.body.decode('utf-8'))
+        user = tokens[request.headers["Authorization"]]
+        if 'name' in data:
+            user.name = data['name']
+        if 'password' in data:
+            user.password = compute_hash(data['password'])
+        if 'contact' in data:
+            user.contact = data['contact']
+        user.save()
+        return JsonResponse({"success":True})
+    return JsonResponse({"success": False, "error": "Bad request method"})
