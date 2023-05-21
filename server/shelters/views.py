@@ -131,10 +131,13 @@ def add_friend(request):
             return JsonResponse({"success": False, "error": "No user with given email exists"})
 
         # Add email to user friend list.
-        user = tokens[request.headers['Authorization']]
-        if 'friends' not in user.friend_list:
-            user.friend_list['friends'] = []
-        user.friend_list['friends'].append(data['email'].lower())
+        user = CustomUser.objects.get(email=data['email'].lower())
+        if 'associates' not in user.friend_list:
+            user.friend_list['associates'] = []
+        current_user_email = tokens[request.headers['Authorization']].email
+        if current_user_email in user.friend_list['associates']:
+            return JsonResponse({"success": False, "error": "User already registered as associate"})
+        user.friend_list['associates'].append(current_user_email)
         user.save()
         return JsonResponse({"success": True})
 
