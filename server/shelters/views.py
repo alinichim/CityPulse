@@ -7,8 +7,6 @@ import json
 from twilio.rest import Client
 from django.views.decorators.csrf import csrf_exempt
 
-
-
 def return_shelters(request):
 
     if request.method == 'GET':

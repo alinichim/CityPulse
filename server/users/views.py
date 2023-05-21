@@ -34,7 +34,7 @@ def register_user(request):
         # Parse the data from request.
         creds = json.loads(request.body.decode('utf-8'))
         # Check if a user with the same username or email already exists
-        email = creds["email"]
+        email = creds["email"].lower()
         name = creds["name"]
 
         if CustomUser.objects.filter(email=email).exists():
@@ -63,7 +63,7 @@ def login_user(request):
         # Parse the data from request.
         creds = json.loads(request.body.decode('utf-8'))
         # Check if a user with the same username or email already exists
-        email = creds["email"]
+        email = creds["email"].lower()
 
         user = CustomUser()
         try:
