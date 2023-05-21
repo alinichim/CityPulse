@@ -13,7 +13,7 @@ const MapComponent = ({ shelters, filterShelters }) => {
           latitudeDelta: 0.1,
           longitudeDelta: 0.1,
         }}
-        showsUserLocation // Enable showsUserLocation prop
+        showsUserLocation 
       >
         {shelters.filter(filterShelters).map((shelter) => (
           <ShelterMarker

@@ -1,64 +1,49 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Button, InputItem, Toast } from "@ant-design/react-native";
+import React, { useState, useEffect } from "react";
+import LoginPage from "./pages/LogIn";
+import RegisterPage from "./pages/Register";
+import SearchMap from "./pages/SearchMap";
+import { Text } from "react-native";
+import { getUser } from "./endpoints";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function App() {
+  const [page, setPage] = useState("login");
+  const authState = useState("");
+  const [isLoggedOut, setIsLoggedOut] = useState(true);
+  const [auth, setAuth] = authState;
 
-  const handleLogin = () => {
-    if (username === "admin" && password === "password") {
-      Toast.success("Login successful");
-    } else {
-      Toast.fail("Invalid username or password");
+  const handleSetLogin = () => {
+    setPage("login");
+  };
+
+  const handleSetRegister = () => {
+    setPage("register");
+  };
+
+  const checkToken = async () => {
+    try {
+      const res = await getUser(auth);
+      if (res.success) setIsLoggedOut(false);
+    } catch (err) {
+      setIsLoggedOut(true);
+      console.log(err);
     }
   };
 
+  useEffect(() => {
+    checkToken();
+  }, [auth]);
+
   return (
-    <View style={styles.container}>
-      {/* <InputItem
-        value={username}
-        onChange={(value) => setUsername(value)}
-        placeholder="Username"
-        style={styles.input}
-      />
-      <InputItem
-        value={password}
-        onChange={(value) => setPassword(value)}
-        placeholder="Password"
-        type="password"
-        style={styles.input}
-      />
-      <Button
-        type="primary"
-        onPress={handleLogin}
-        style={styles.button}
-        activeStyle={styles.buttonActive}
-      >
-        Login
-      </Button> */}
-    </View>
+    <>
+      {isLoggedOut ? (
+        page === "login" ? (
+          <LoginPage toggleState={handleSetRegister} authState={authState} />
+        ) : (
+          <RegisterPage toggleState={handleSetLogin} authState={authState} />
+        )
+      ) : (
+        <SearchMap auth={auth} />
+      )}
+    </>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-  },
-  input: {
-    marginBottom: 16,
-    borderRadius: 5,
-  },
-  button: {
-    borderRadius: 5,
-  },
-  buttonActive: {
-    backgroundColor: "#4CAAD7",
-  },
-});
-
-export default LoginPage;
+}

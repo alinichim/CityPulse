@@ -11,7 +11,6 @@ const ControlPanel = ({
 }) => {
   return (
     <View style={styles.controlPanel}>
-      <Text style={styles.controlText}>Filter Shelters:</Text>
       <View style={styles.switchContainer}>
         <Text style={styles.filterLabel}>Exit</Text>
         <Switch value={showExit} onValueChange={toggleExit} />
@@ -30,37 +29,34 @@ const ControlPanel = ({
 
 export default ControlPanel;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   controlPanel: {
     position: "absolute",
-    top: 70,
-    left: 20,
-    flexDirection: "column", // Change flexDirection to "column"
-    alignItems: "flex-start", // Adjust alignment as per your preference
+    bottom: 50,
+    left: "10%",
+    right: "10%",
+    width: "80%",
     backgroundColor: "white",
     borderRadius: 10,
-    padding: 15,
-    paddingBottom: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
-    width: 145,
+
+    flexDirection: "row", // Change flexDirection to "row"
+    alignItems: "center", // Adjust alignment as per your preference
+    justifyContent: "space-between", // Adjust alignment as per your preference
+    paddingVertical: 15, // Adjust vertical padding for spacing
+    paddingHorizontal: 15, // Adjust horizontal padding for spacing
   },
   controlText: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 10, // Add margin bottom for spacing
   },
   switchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     display: "flex",
-    width: "100%",
     textAlign: "left",
   },
   filterIcon: {

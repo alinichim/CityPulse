@@ -3,7 +3,18 @@ import { ScrollView, StyleSheet, Text, Image, View } from "react-native";
 import disc from "@jsamr/counter-style/presets/disc";
 import MarkedList from "@jsamr/react-native-li";
 import { Marker, Callout } from "react-native-maps";
+const parseStringToArray = (str) => {
+  // Remove the leading and trailing curly braces
+  const trimmedStr = str.slice(1, -1);
 
+  // Split the string by commas
+  const values = trimmedStr.split(",");
+
+  // Trim each value and remove any leading/trailing spaces
+  const parsedArray = values.map((value) => value.trim());
+
+  return parsedArray;
+};
 export default function CustomMarker({
   coordinate,
   title,
@@ -28,18 +39,18 @@ export default function CustomMarker({
     },
     calloutContainer: {
       padding: 5,
-      width: 150,
+      width: 250,
       alignSelf: "flex-start",
     },
     row: {
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "flex-start",
     },
   };
 
   const types = ["exit", "atomic", "civil"];
   if (!types.includes(type)) type = "default";
-  console.log(type);
+  const functionalitiesArr = parseStringToArray(functionalities);
   return (
     <Marker coordinate={coordinate}>
       {type !== "default" && (
@@ -55,9 +66,13 @@ export default function CustomMarker({
             <Text style={styles.label}>Capacity: </Text>
             <Text>{capacity}</Text>
           </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Adress: </Text>
+            <Text>{description}</Text>
+          </View>
           <Text style={styles.label}>Facilities:</Text>
           <MarkedList counterRenderer={disc}>
-            {functionalities.map((facility, index) => (
+            {functionalitiesArr.map((facility, index) => (
               <Text key={index}>{facility}</Text>
             ))}
           </MarkedList>
