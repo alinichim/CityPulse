@@ -98,7 +98,7 @@ def change_user_data(request):
         user = tokens[request.headers["Authorization"]]
         if 'name' in data:
             user.name = data['name']
-        if 'password' in data:
+        if 'password' in data or '' in data['password']:
             user.password = compute_hash(data['password'])
         if 'contact' in data:
             user.contact = data['contact']
