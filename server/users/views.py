@@ -6,13 +6,6 @@ import hashlib
 import string
 import random
 
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import FavoriteLocation
-from .serializers import FavoriteLocationSerializer
-from rest_framework import status
-
 
 def generate_token(length):
     letters = string.ascii_letters + string.digits
@@ -124,7 +117,7 @@ def add_fav(request):
         if FavoriteLocation.objects.filter(data=data).values():
             return JsonResponse({"success":False, "error":"Already added to favorite"})
         else:
-            FavoriteLocation(user=user, data=request.body).save()
+            FavoriteLocation(user=user, data=data).save()
             return JsonResponse({"success":True})
         
 
@@ -146,10 +139,10 @@ def remove_fav(request):
     if request.method == "POST":
         if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
             return JsonResponse({"success": False, "error": "Invalid token"})
-        user = tokens[request.headers["Authorization"]]
         data = json.loads(request.body.decode('utf-8'))
         try:
-            FavoriteLocation.objects.get(user=user, data=data)
+            item = FavoriteLocation.objects.get(data=data)
+            item.delete()
             return JsonResponse({"success":True})
         except FavoriteLocation.DoesNotExist:
             return JsonResponse({"success":False, "error":"Could not find the item"})
