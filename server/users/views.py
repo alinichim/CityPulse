@@ -147,8 +147,11 @@ def remove_fav(request):
         if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
             return JsonResponse({"success": False, "error": "Invalid token"})
         user = tokens[request.headers["Authorization"]]
-        data = request.body
-        FavoriteLocation.objects.get(user=user, data=data).delete()
-        return JsonResponse({"success":True})
+        data = json.loads(request.body.decode('utf-8'))
+        try:
+            FavoriteLocation.objects.get(user=user, data=data)
+            return JsonResponse({"success":True})
+        except FavoriteLocation.DoesNotExist:
+            return JsonResponse({"success":False, "error":"Could not find the item"})
     return JsonResponse({"success": False, "error": "Bad request method"})
 
