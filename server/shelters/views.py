@@ -44,7 +44,7 @@ def get_user(request):
             return JsonResponse({"success": False, "error": "Invalid token"})
         
         user = tokens[request.headers["Authorization"]]
-        return JsonResponse({"success": True, "name": user.name, "email": user.email})
+        return JsonResponse({"success": True, "name": user.name, "email": user.email, "contact": user.contact})
     
     return JsonResponse({"success": False, "error": "Bad request method"})
 

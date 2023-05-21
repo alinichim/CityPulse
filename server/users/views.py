@@ -86,3 +86,4 @@ def login_user(request):
         return response
     
     return JsonResponse({"success": False, "error": "Bad request method"})
+
