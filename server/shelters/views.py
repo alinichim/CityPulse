@@ -7,6 +7,8 @@ import json
 from twilio.rest import Client
 from django.views.decorators.csrf import csrf_exempt
 
+
+
 def return_shelters(request):
 
     if request.method == 'GET':
@@ -96,7 +98,7 @@ def emergency_sms(request):
         
         client = Client(account_sid, auth_token)
         data = json.loads(request.body.decode('utf-8'))
-        msg_text = f"{tokens[request.headers['Authorization']].name} is in need of urgent help!If you can't reach out to them, please dial the national emergency number and ask for immediate support! (lat. {str(data['latitude'])} long. {str(data['latitude'])}"
+        msg_text = f"{tokens[request.headers['Authorization']].name} is in need of urgent help!If you can't reach out to them, please dial the national emergency number and ask for immediate support! (lat. {str(data['latitude'])}, long. {str(data['latitude'])}"
         
         message = client.messages.create(
             body=msg_text,

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from jsonfield import JSONField
 
 
 class CustomUserManager(BaseUserManager):
@@ -34,3 +35,11 @@ class CustomUser(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+    
+
+class FavoriteLocation(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='favorite_locations')
+    data = JSONField()
+
+    def __str__(self):
+        return f"Favorite Location for {self.user.email}"

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'shelters',
     'users',
     'rest_framework',
+
 ]
 
 MIDDLEWARE = [

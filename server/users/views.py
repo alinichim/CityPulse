@@ -1,10 +1,17 @@
 from django.http import JsonResponse
-from .models import CustomUser
+from .models import CustomUser, FavoriteLocation
 from django.views.decorators.csrf import csrf_exempt
 import json
 import hashlib
 import string
 import random
+
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import FavoriteLocation
+from .serializers import FavoriteLocationSerializer
+from rest_framework import status
 
 
 def generate_token(length):
@@ -105,3 +112,43 @@ def change_user_data(request):
         user.save()
         return JsonResponse({"success":True})
     return JsonResponse({"success": False, "error": "Bad request method"})
+
+
+@csrf_exempt
+def add_fav(request):
+    if request.method == "POST":
+        if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+            return JsonResponse({"success": False, "error": "Invalid token"})
+        user = tokens[request.headers["Authorization"]]
+        data = json.loads(request.body.decode('utf-8'))
+        if FavoriteLocation.objects.filter(data=data).values():
+            return JsonResponse({"success":False, "error":"Already added to favorite"})
+        else:
+            FavoriteLocation(user=user, data=request.body).save()
+            return JsonResponse({"success":True})
+        
+
+@csrf_exempt
+def get_fav(request):    
+    if request.method == "GET":
+        if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+            return JsonResponse({"success": False, "error": "Invalid token"})
+        user = tokens[request.headers["Authorization"]]
+        favorite_locations = FavoriteLocation.objects.filter(user=user).values()
+        response_data = json.dumps(list(favorite_locations), ensure_ascii=False)
+
+        return JsonResponse(response_data, safe=False)
+    return JsonResponse({"success": False, "error": "Bad request method"})
+
+
+@csrf_exempt
+def remove_fav(request):    
+    if request.method == "POST":
+        if "Authorization" not in request.headers or request.headers["Authorization"] not in tokens:
+            return JsonResponse({"success": False, "error": "Invalid token"})
+        user = tokens[request.headers["Authorization"]]
+        data = request.body
+        FavoriteLocation.objects.get(user=user, data=data).delete()
+        return JsonResponse({"success":True})
+    return JsonResponse({"success": False, "error": "Bad request method"})
+
